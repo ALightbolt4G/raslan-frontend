@@ -676,6 +676,18 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 13px;
     }
 }
+@media screen and (max-width: 768px) {
+    .service-unavailable-message {
+        align-items: start; /* في الموبايل يبدأ من فوق عشان لو الكارت طويل */
+        padding-top: 50px;
+    }
+    
+    .unavailable-card {
+        padding: 15px;
+        font-size: 0.9rem; /* تصغير الخط شوية للموبايل */
+    }
+}
+
 </style>
 <script src="system-info.js"></script>
 	</body>
@@ -713,3 +725,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	"من حبة أرز إلى نظام متكامل... قصة كشري رقمي ناجح 🍛"
 	-->
+	
