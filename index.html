@@ -378,57 +378,47 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-./* 1. نخلي الـ/* 1. الحاوية الشاملة - تغطي الشاشة بالكامل */
+/* 1. الحاوية الخلفية */
 .service-unavailable-message {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw; /* عرض الشاشة بالكامل */
-    height: 100vh; /* طول الشاشة بالكامل */
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 10000;
-    overflow-y: auto; /* يسمح بالسكرول لو الموبايل صغير */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+    z-index: 99999 !important; /* أعلى من أي عنصر في الصفحة */
     backdrop-filter: blur(5px);
-    display: block; /* هنغيرها من flex لـ block عشان نتحكم في الكارت بدقة */
+    overflow-y: auto;
 }
 
-/* 2. الكارت - السنترة الحقيقية */
+/* 2. الكارت - السنترة بالملّي */
 .unavailable-card {
-    background: #fff;
-    width: 90%;
-    max-width: 480px;
-    border-radius: 25px;
-    padding: 25px;
-    border: 3px solid #ff8c00;
-    box-sizing: border-box;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    position: fixed !important; /* ثابت بالنسبة للشاشة */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important; /* السنترة السحرية */
     
-    /* التريك السحري للسنترة */
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* يرجعه لنص عرضه وطوله بالظبط */
+    background: white !important;
+    width: 90% !important;
+    max-width: 450px !important;
+    padding: 25px !important;
+    border-radius: 20px !important;
+    border: 3px solid #ff8c00 !important;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5) !important;
     
-    margin: 0; /* نلغي أي مارجن قديم */
-    text-align: center;
+    /* منع أي تأثير جانبي */
+    margin: 0 !important;
+    right: auto !important;
+    float: none !important;
 }
 
-
-
-
-/* 4. تحسين الموبايل (Responsive) */
-@media (max-width: 768px) {
-    .service-unavailable-message {
-        align-items: flex-start; /* يبدأ من فوق في الشاشات الصغيرة عشان السكرول */
-        padding-top: 40px;
-    }
-    
+/* 3. للموبايل (لو الشاشة قصيرة) */
+@media screen and (max-height: 600px) {
     .unavailable-card {
-        padding: 20px;
-        width: 90%;
+        top: 10px !important;
+        transform: translate(-50%, 0) !important;
     }
 }
-
 
 .close-btn {
     position: absolute;
