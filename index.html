@@ -380,38 +380,65 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 ./* 1. نخلي الـ Container نفسه يسمح بالسكرول لو الكارت طوله زاد */
 /* Container الأساسي */
+/* 1. الـ Container الأساسي - السجان */
 .service-unavailable-message {
     position: fixed;
-    inset: 0; /* بديل لـ top, left, width, height: 100% */
+    inset: 0; 
     background: rgba(0, 0, 0, 0.85);
-    display: grid; /* الـ Grid أسهل في السنترة من الـ Flex */
-    place-items: center; 
+    display: flex; /* هنستخدم Flexbox لأنه أدق في الموبايل */
+    justify-content: center; /* سنترة عرضية */
+    align-items: center;    /* سنترة طولية */
     padding: 20px;
     z-index: 10000;
     overflow-y: auto;
     backdrop-filter: blur(5px);
+    direction: ltr; /* نخلي الحاوية ltr عشان الـ scrollbar والسنترة متتأثرش بالـ rtl */
 }
 
-/* الكارت */
+/* 2. الكارت - البطل */
 .unavailable-card {
     background: #fff;
-    width: min(90%, 500px); /* يختار الأصغر بين 90% أو 500px */
-    border-radius: 20px;
-    padding: 25px;
+    width: min(95%, 480px);
+    border-radius: 25px;
+    padding: 30px;
     position: relative;
     border: 3px solid #ff8c00;
-    box-sizing: border-box; /* عشان الـ Padding ميزودش الحجم ويبوظ الـ Center */
+    box-sizing: border-box;
+    margin: auto; /* يضمن السنترة لو المحتوى طويل */
+    direction: rtl; /* نرجع الكلام باللغة العربية داخل الكارت */
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
 }
 
-/* استخدام الـ Selectors لمنع التداخل */
-.unavailable-content > * {
-    margin-bottom: 15px; /* يدي مساحة بين كل العناصر اللي جوه بالتساوي */
+/* 3. استخدام Selectors لمنع التداخل (Spacing) */
+.unavailable-content > div, 
+.unavailable-content > h3, 
+.unavailable-content > p {
+    margin-bottom: 20px !important; /* مسافة موحدة بين كل العناصر المتداخلة */
+    position: relative;
+    display: block;
 }
 
-.unavailable-content > *:last-child {
-    margin-bottom: 0; /* آخر عنصر مياخدش مساحة تحت */
+/* تنسيق الصور والأيقونات داخل الكارت لمنع التداخل */
+.unavailable-content .icon,
+.unavailable-content .invitation-icon {
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
+/* 4. تحسين الموبايل (Responsive) */
+@media (max-width: 768px) {
+    .service-unavailable-message {
+        align-items: flex-start; /* يبدأ من فوق في الشاشات الصغيرة عشان السكرول */
+        padding-top: 40px;
+    }
+    
+    .unavailable-card {
+        padding: 20px;
+        width: 90%;
+    }
+}
 
 
 .close-btn {
