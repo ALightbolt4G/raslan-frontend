@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقييم خدمة كشري وكريب رسلان</title>
+    <link rel="stylesheet" href="styles/feedback.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" type="image/png">
+    <style>
+        /* تنسيقات إضافية مدمجة للتأكد من العمل */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* ضمان عمل التنسيقات الأساسية */
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- قسم تسجيل الدخول -->
+        <div id="login-section" class="login-section">
+            <div class="login-container fade-in">
+                <div class="login-header">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" 
+                         alt="شعار كشري وكريب رسلان" class="logo">
+                    <h1>تقييم الخدمة ⭐</h1>
+                    <p>أدخل بيانات حسابك لتقييم تجربتك</p>
+                </div>
+                
+                <form id="login-form" class="login-form">
+                    <div class="input-group required">
+                        <label for="client-id">رقم الحساب:</label>
+                        <input type="text" 
+                               id="client-id" 
+                               name="client-id"
+                               placeholder="أدخل رقم حسابك" 
+                               required
+                               aria-required="true">
+                        <span class="sr-only">مطلوب</span>
+                    </div>
+                    
+                    <div class="input-group required">
+                        <label for="client-phone">رقم الهاتف:</label>
+                        <input type="tel" 
+                               id="client-phone" 
+                               name="client-phone"
+                               placeholder="01xxxxxxxxx" 
+                               pattern="^01[0-9]{9}$"
+                               required
+                               aria-required="true"
+                               aria-describedby="phone-hint">
+                        <small class="hint" id="phone-hint">يجب أن يبدأ بـ 01 ويحتوي على 11 رقماً</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" aria-label="متابعة التقييم">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        متابعة التقييم
+                    </button>
+                </form>
+                
+                <div class="login-links">
+                    <a href="login.html" class="link" aria-label="إنشاء حساب جديد">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>
+                        إنشاء حساب جديد
+                    </a>
+                    <a href="login.html" class="link" aria-label="استعادة حساب">
+                        <i class="fas fa-key" aria-hidden="true"></i>
+                        نسيت رقم حسابك؟
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div id="main-content" class="main-content" style="display: none;" aria-hidden="true">
+            <!-- شريط المعلومات -->
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="client-info">
+                        <div class="client-avatar" aria-hidden="true">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="client-details">
+                            <span class="client-name" id="client-name">العميل</span>
+                            <span class="client-id">ID: <span id="client-id-display">0</span></span>
+                        </div>
+                    </div>
+                    <button id="logout-btn" class="btn-logout" aria-label="تغيير الحساب">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        تغيير الحساب
+                    </button>
+                </div>
+            </header>
+
+            <!-- محتوى التطبيق -->
+            <main class="app-main">
+                <!-- رسالة ترحيب -->
+                <section class="welcome-section fade-in">
+                    <h1>كشري وكريب رسلان المصري</h1>
+                    <p class="subtitle">شاركنا رأيك لنساعدك بشكل أفضل</p>
+                </section>
+
+                <!-- شاشة التحميل -->
+                <div id="loading" class="loading" style="display: none;" aria-live="polite" aria-label="جاري التحميل">
+                    <div class="spinner" aria-hidden="true"></div>
+                    <p>جاري تحميل البيانات...</p>
+                </div>
+
+                <!-- نموذج التقييم -->
+                <section class="feedback-section" aria-labelledby="feedback-title">
+                    <div class="section-card shadow-glow fade-in">
+                        <h2 class="section-title" id="feedback-title">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                            تقييم الخدمة
+                        </h2>
+                        
+                        <!-- النجوم -->
+                        <div class="rating-section">
+                            <h3>كيف تقيم تجربتك معنا؟</h3>
+                            <div class="stars-container">
+                                <div class="stars" role="group" aria-labelledby="rating-label">
+                                    <span id="rating-label" class="sr-only">تقييم من 5 نجوم</span>
+                                    <span class="star" data-rating="1" role="radio" aria-checked="false" tabindex="0" aria-label="نجمة واحدة - سيء جداً">☆</span>
+                                    <span class="star" data-rating="2" role="radio" aria-checked="false" tabindex="0" aria-label="نجمتين - سيء">☆</span>
+                                    <span class="star" data-rating="3" role="radio" aria-checked="false" tabindex="0" aria-label="ثلاث نجوم - متوسط">☆</span>
+                                    <span class="star" data-rating="4" role="radio" aria-checked="false" tabindex="0" aria-label="أربع نجوم - جيد">☆</span>
+                                    <span class="star" data-rating="5" role="radio" aria-checked="false" tabindex="0" aria-label="خمس نجوم - ممتاز">☆</span>
+                                </div>
+                                <div class="rating-text" id="rating-text" aria-live="polite">اضغط على النجوم للتقييم</div>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" required aria-hidden="true">
+                        </div>
+
+                        <!-- الإيموجيز -->
+                        <div class="emoji-section">
+                            <h3>ما هو شعورك تجاه الخدمة؟</h3>
+                            <div class="emojis-container" role="group" aria-labelledby="emoji-label">
+                                <span id="emoji-label" class="sr-only">اختيار شعور تجاه الخدمة</span>
+                                <div class="emoji-item" data-emoji="😠" role="radio" aria-checked="false" tabindex="0">
+                                    <span class="emoji" aria-hidden="true">😠</span>
+                                    <span class="emoji-label">سيء</span>
+                                </div>
+                                <div class="emoji-item" data-emoji="😐" role="radio" aria-checked="false" tabindex="0">
+                                    <span class="emoji" aria-hidden="true">😐</span>
+                                    <span class="emoji-label">متوسط</span>
+                                </div>
+                                <div class="emoji-item" data-emoji="😊" role="radio" aria-checked="false" tabindex="0">
+                                    <span class="emoji" aria-hidden="true">😊</span>
+                                    <span class="emoji-label">جيد</span>
+                                </div>
+                                <div class="emoji-item" data-emoji="😍" role="radio" aria-checked="false" tabindex="0">
+                                    <span class="emoji" aria-hidden="true">😍</span>
+                                    <span class="emoji-label">ممتاز</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="selectedEmoji" name="selectedEmoji" value="😐" aria-hidden="true">
+                        </div>
+
+                        <!-- التعليق -->
+                        <div class="comment-section">
+                            <h3>ملاحظاتك تساعدنا على التحسين</h3>
+                            <div class="input-group">
+                                <label for="comment" class="sr-only">تعليقك</label>
+                                <textarea 
+                                    id="comment" 
+                                    name="comment" 
+                                    placeholder="اكتب تعليقك هنا... (اختياري)"
+                                    rows="4"
+                                    maxlength="500"
+                                    aria-describedby="char-counter"
+                                ></textarea>
+                                <div class="char-count" id="char-counter">
+                                    <span id="char-count" class="count-normal">0</span>/500 حرف
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- تفاصيل العميل -->
+                    <div class="section-card shadow-glow fade-in">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-circle" aria-hidden="true"></i>
+                            معلوماتك
+                        </h2>
+                        <div class="client-details-grid">
+                            <div class="detail-card">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                                <div>
+                                    <div class="detail-label">الاسم</div>
+                                    <div id="display-name" class="detail-value">-</div>
+                                </div>
+                            </div>
+                            <div class="detail-card">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                <div>
+                                    <div class="detail-label">الهاتف</div>
+                                    <div id="display-phone" class="detail-value">-</div>
+                                </div>
+                            </div>
+                            <div class="detail-card">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <div>
+                                    <div class="detail-label">عميل منذ</div>
+                                    <div id="display-member-since" class="detail-value">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- زر إرسال التقييم -->
+                    <button id="submit-feedback" class="btn-whatsapp pulse" onclick="handleFeedbackSubmit(event)">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                        إرسال التقييم
+                    </button>
+                </section>
+
+                <!-- قسم الإحصائيات (اختياري) -->
+                <section class="stats-section" aria-labelledby="stats-title" style="display: none;">
+                    <div class="section-card">
+                        <h2 class="section-title" id="stats-title">
+                            <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                            إحصائيات التقييمات
+                        </h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="avg-rating">0.0</div>
+                                    <div class="stat-label">متوسط التقييم</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-comments" aria-hidden="true"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="total-feedbacks">0</div>
+                                    <div class="stat-label">عدد التقييمات</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- نافذة التنبيهات -->
+    <div id="alert-modal" class="modal alert-modal" role="dialog" aria-labelledby="alert-title" aria-modal="true" style="display: none;">
+        <div class="modal-content">
+            <div class="alert-icon" id="alert-icon" aria-hidden="true">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 id="alert-title">تم بنجاح</h3>
+            <p id="alert-message">رسالة التنبيه</p>
+            <button class="btn-primary" id="close-alert" aria-label="حسناً">
+                حسناً
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة التأكيد -->
+    <div id="confirm-modal" class="modal alert-modal" role="dialog" aria-labelledby="confirm-title" aria-modal="true" style="display: none;">
+        <div class="modal-content">
+            <div class="alert-icon" aria-hidden="true">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h3 id="confirm-title">تأكيد الإجراء</h3>
+            <p id="confirm-message">هل أنت متأكد من أنك تريد المتابعة؟</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancel-confirm" aria-label="إلغاء">
+                    إلغاء
+                </button>
+                <button class="btn-primary" id="confirm-action" aria-label="تأكيد">
+                    تأكيد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- الهيكل العظمي للتحميل -->
+    <div id="skeleton-loading" cla  ss="skeleton-container" style="display: none;">
+        <div class="skeleton-card">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line"></div>
+        </div>
+    </div>
+
+    <script src="scripts/feedback.js"></script>
+    
+    <script>
+        // كود تهيئة إضافي للتأكد من عمل جميع الميزات
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ تم تحميل صفحة التقييم بنجاح');
+            
+            // إضافة تأثيرات تفاعلية إضافية
+            const stars = document.querySelectorAll('.star');
+            const emojis = document.querySelectorAll('.emoji-item');
+            const commentTextarea = document.getElementById('comment');
+            const charCount = document.getElementById('char-count');
+            
+            // تأثيرات النجوم
+            stars.forEach(star => {
+                star.addEventListener('mouseenter', function() {
+                    this.classList.add('hover');
+                });
+                
+                star.addEventListener('mouseleave', function() {
+                    this.classList.remove('hover');
+                });
+                
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    selectStar(rating);
+                });
+                
+                // دعم لوحة المفاتيح
+                star.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const rating = this.getAttribute('data-rating');
+                        selectStar(rating);
+                    }
+                });
+            });
+            
+            // تأثيرات الإيموجيز
+            emojis.forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    const selectedEmoji = this.getAttribute('data-emoji');
+                    selectEmoji(this, selectedEmoji);
+                });
+                
+                emoji.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const selectedEmoji = this.getAttribute('data-emoji');
+                        selectEmoji(this, selectedEmoji);
+                    }
+                });
+            });
+            
+            // عداد الأحرف
+            if (commentTextarea && charCount) {
+                commentTextarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    charCount.textContent = length;
+                    
+                    // تحديث اللون حسب عدد الأحرف
+                    charCount.className = 'count-normal';
+                    if (length > 450) {
+                        charCount.className = 'count-danger';
+                    } else if (length > 300) {
+                        charCount.className = 'count-warning';
+                    }
+                });
+            }
+            
+            // وظائف مساعدة
+            function selectStar(rating) {
+                stars.forEach((star, index) => {
+                    const isActive = index < rating;
+                    star.classList.toggle('active', isActive);
+                    star.setAttribute('aria-checked', isActive);
+                    
+                    if (isActive) {
+                        star.classList.add('animated');
+                        setTimeout(() => star.classList.remove('animated'), 600);
+                    }
+                });
+                
+                // تحديث نص التقييم
+                const ratingText = document.getElementById('rating-text');
+                const texts = {
+                    1: 'سيء جداً 😞',
+                    2: 'سيء 🙁',
+                    3: 'متوسط 😐',
+                    4: 'جيد 😊',
+                    5: 'ممتاز 😍'
+                };
+                ratingText.textContent = texts[rating] || 'اضغط على النجوم للتقييم';
+                ratingText.classList.add('active');
+                
+                // تحديث الحقل المخفي
+                document.getElementById('rating').value = rating;
+            }
+            
+            function selectEmoji(element, emoji) {
+                emojis.forEach(emojiItem => {
+                    emojiItem.classList.remove('selected', 'animated');
+                    emojiItem.setAttribute('aria-checked', 'false');
+                });
+                
+                element.classList.add('selected', 'animated');
+                element.setAttribute('aria-checked', 'true');
+                document.getElementById('selectedEmoji').value = emoji;
+                
+                // إزالة class animated بعد الانتهاء من التحريك
+                setTimeout(() => {
+                    element.classList.remove('animated');
+                }, 600);
+            }
+            
+            // تهيئة القيم الافتراضية
+            window.selectStar = selectStar;
+            window.selectEmoji = selectEmoji;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "كشري وكريب رسلان",
+  "short_name": "رسلان",
+  "description": "منيو الكشري والكريب من فرع المريوطية - الجيزة",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ff8c00",
+  "icons": [
+    {
+      "src": "/imgs/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/imgs/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

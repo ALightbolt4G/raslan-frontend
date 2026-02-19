@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة مطعم رسلان المصري | كشري وكريب</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- إضافة هذه السمات إلى ملف HTML الرئيسي -->
+
+<!-- داخل head -->
+ <link rel="icon" href="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" type="image/png"></head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="theme-color" content="#2c3e50">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- إضافة وصف للشاشات المختلفة -->
+<meta name="description" content="نظام إدارة مطعم رسلان - إدارة كاملة للطلبات والعملاء والمنتجات">
+<meta name="keywords" content="مطعم, إدارة, طلبات, عملاء, منتجات, تقارير">
+
+<!-- الأيقونات للشاشات المختلفة -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+
+<!-- داخل body -->
+<div id="loading" class="preload">
+    <div class="spinner"></div>
+    <p>جاري التحميل...</p>
+</div>
+
+<!-- إضافة طبقة للشاشات الصغيرة -->
+<div class="mobile-overlay" onclick="toggleSidebar()"></div>
+</head>
+<body>
+    <!-- صفحة تسجيل الدخول -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-box">
+                <!-- شعار المطعم -->
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-utensils"></i>
+                        <span>رسلان</span>
+                    </div>
+                    <h1>مطعم رسلان المصري</h1>
+                    <p class="subtitle">كشري • كريب • وجبات سريعة</p>
+                    <p class="tagline">نظام إدارة المطعم المتكامل</p>
+                </div>
+
+                <!-- نموذج تسجيل الدخول -->
+                <form id="loginForm" class="login-form">
+                    <div class="input-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            البريد الإلكتروني
+                        </label>
+                        <input type="email" id="email" placeholder="admin@raslankoshary.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            كلمة المرور
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="********" required>
+                            <button type="button" class="toggle-password" onclick="togglePassword()">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        تسجيل الدخول
+                    </button>
+
+                    <div class="login-footer">
+                        <div class="alert" id="loginAlert"></div>
+                        <p class="version">الإصدار 4.0.0 - نظام الولاء النشط</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="dashboardPage" class="page">
+        <!-- الشريط العلوي -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo-small">
+                    <i class="fas fa-utensils"></i>
+                    <span>رسلان</span>
+                </div>
+            </div>
+
+            <div class="nav-center">
+                <h1>لوحة تحكم إدارة المطعم</h1>
+                <div class="status-indicator">
+                    <span class="dot online"></span>
+                    <span>متصل بالنظام</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <button class="btn-notification" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                
+                <div class="user-menu" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">مدير النظام</span>
+                        <span class="user-role">مسؤول رئيسي</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                    
+                    <!-- قائمة المستخدم -->
+                    <div class="dropdown-menu" id="userDropdown">
+                        <a href="#" onclick="showProfile()">
+                            <i class="fas fa-user"></i>
+                            الملف الشخصي
+                        </a>
+                        <a href="#" onclick="showSettings()">
+                            <i class="fas fa-cog"></i>
+                            الإعدادات
+                        </a>
+                        <div class="divider"></div>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            تسجيل الخروج
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-sliders-h"></i> القوائم الرئيسية</h3>
+                <button class="sidebar-close" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" onclick="window.showDashboard ? window.showDashboard() : loadDashboard()">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showOrders()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>الطلبات</span>
+                    <span class="badge">5</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showClients()">
+                    <i class="fas fa-users"></i>
+                    <span>العملاء</span>
+                    <span class="badge">13</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showProducts()">
+                    <i class="fas fa-hamburger"></i>
+                    <span>المنتجات</span>
+                    <span class="badge">97</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showCategories()">
+                    <i class="fas fa-tags"></i>
+                    <span>التصنيفات</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showAreas()">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>المناطق</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showReports()">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>التقارير</span>
+                </a>
+
+                <a href="#" class="menu-item" onclick="showFeedback()">
+                    <i class="fas fa-star"></i>
+                    <span>التقييمات</span>
+                    <span class="badge">1</span>
+                </a>
+
+                <div class="sidebar-footer">
+                    <div class="system-info">
+                        <p><i class="fas fa-server"></i> النظام: نشط</p>
+                        <p><i class="fas fa-database"></i> قاعدة البيانات: متصل</p>
+                        <p><i class="fas fa-clock"></i> آخر تحديث: <span id="lastUpdate">الآن</span></p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content" id="mainContent">
+            <!-- محتوى لوحة التحكم سيظهر هنا -->
+            <div class="content-header">
+                <h2><i class="fas fa-tachometer-alt"></i> نظرة عامة على الأداء</h2>
+                <button class="btn-refresh" onclick="refreshDashboard()">
+                    <i class="fas fa-redo"></i>
+                    تحديث البيانات
+                </button>
+            </div>
+
+            <!-- إحصائيات سريعة -->
+            <div class="stats-grid" id="statsContainer">
+                <!-- سيتم ملؤها بالبيانات -->
+            </div>
+
+            <!-- الطلبات الأخيرة -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock"></i> الطلبات الأخيرة</h3>
+                    <a href="#" onclick="showOrders()" class="view-all">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="recentOrdersTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- العملاء الجدد -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-plus"></i> العملاء الجدد</h3>
+                    <a href="#" onclick="showClients()" class="view-all">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="recentClientsTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- التنبيهات -->
+        <div class="notifications-panel" id="notificationsPanel">
+            <div class="notifications-header">
+                <h3><i class="fas fa-bell"></i> التنبيهات</h3>
+                <button class="btn-close" onclick="hideNotifications()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notifications-body">
+                <!-- سيتم ملؤها بالبيانات -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal للمنتجات -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <!-- سيتم ملؤها بالبيانات -->
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>

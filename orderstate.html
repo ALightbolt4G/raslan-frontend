@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع طلباتي - كشري وكريب رسلان</title>
+    <link rel="stylesheet" href="styles/orderstate.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" type="image/png">
+</head>
+<body>
+    <div id="app">
+        <!-- قسم تسجيل الدخول -->
+        <div id="login-section" class="login-section">
+            <div class="login-container">
+                <div class="login-header">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" alt="Logo" class="logo">
+                    <h1>تتبع طلباتك 🕒</h1>
+                    <p>أدخل بيانات حسابك لمشاهدة طلباتك السابقة</p>
+                </div>
+                
+                <form id="login-form" class="login-form">
+                    <div class="input-group">
+                        <label for="client-id">رقم الحساب:</label>
+                        <input type="text" id="client-id" placeholder="أدخل رقم حسابك" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="client-phone">رقم الهاتف:</label>
+                        <input type="tel" id="client-phone" placeholder="01xxxxxxxxx" required>
+                        <small class="hint">يجب أن يبدأ بـ 01 ويحتوي على 11 رقماً</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-history"></i>
+                        عرض الطلبات
+                    </button>
+                </form>
+                
+                <div class="login-links">
+                    <a href="order.html" class="link">
+                        <i class="fas fa-utensils"></i>
+                        طلب جديد
+                    </a>
+                    <a href="feedback.html" class="link">
+                        <i class="fas fa-comment-alt"></i>
+                        تقييم الخدمة
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div id="main-content" class="main-content" style="display: none;">
+            <!-- شريط المعلومات -->
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="client-details">
+                            <span class="client-name" id="client-name">العميل</span>
+                            <span class="client-id">ID: <span id="client-id-display">0</span></span>
+                        </div>
+                    </div>
+                    <button id="logout-btn" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        تغيير الحساب
+                    </button>
+                </div>
+            </header>
+
+            <!-- محتوى التطبيق -->
+            <main class="app-main">
+                <!-- رسالة ترحيب -->
+                <section class="welcome-section">
+                    <h1>كشري وكريب رسلان المصري</h1>
+                    <p class="subtitle">تابع حالة طلباتك وتاريخها</p>
+                </section>
+
+
+
+                <!-- شاشة التحميل -->
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل الطلبات...</p>
+                </div>
+
+                <!-- 🔥 قسم الولاء - أضف هذا بعد <section class="welcome-section"> -->
+<!-- قسم الولاء -->
+<section id="loyalty-section" class="loyalty-section">
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="fas fa-crown"></i>
+            برنامج الولاء
+        </h2>
+        <div class="loyalty-content">
+            <div class="loyalty-progress-container">
+                <div class="loyalty-progress-bar">
+                    <div id="loyalty-progress" class="loyalty-progress"></div>
+                </div>
+                <div class="loyalty-progress-text">
+                    <span id="loyalty-progress-text">0/5</span>
+                </div>
+            </div>
+            <p id="loyalty-message" class="loyalty-message">
+                ابدأ بجمع الطلبات للحصول على توصيل مجاني!
+            </p>
+             <div class="points-display-section">
+                <div class="points-summary">
+                    <div class="points-item">
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <div class="points-label">رصيد النقاط الحالي</div>
+                            <div class="points-value" id="current-points">0</div>
+                            <div class="points-equivalent" id="points-equivalent">(0 جنيه)</div>
+                        </div>
+                    </div>
+                    <div class="points-item">
+                        <i class="fas fa-gift"></i>
+                        <div>
+                            <div class="points-label">قيمة النقاط</div>
+                            <div class="points-value">1:10</div>
+                            <div class="points-equivalent">(كل 10 نقاط = 1 جنيه)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="points-history" id="points-history">
+                    <div class="points-history-header">
+                        <h4><i class="fas fa-history"></i> آخر المعاملات</h4>
+                        <button class="btn-small" onclick="refreshPoints()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="points-history-items" id="points-history-items">
+                        <!-- سيتم تعبئة هذا القسم ديناميكياً -->
+                        <div class="empty-history">
+                            <i class="fas fa-info-circle"></i>
+                            <p>لا توجد معاملات نقاط حتى الآن</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- الإحصائيات المتقدمة -->
+            <div id="advanced-stats" class="advanced-stats"></div>
+            
+            <div class="loyalty-benefits">
+                <div class="benefit-item">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>توصيل مجاني بعد 5 طلبات</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-gift"></i>
+                    <span>مكافآت حصرية</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-star"></i>
+                    <span>أولوية في الخدمة</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+                <!-- إحصائيات سريعة -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card total">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-count">0</div>
+                                <div class="stat-label">إجمالي الطلبات</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card pending">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="pending-count">0</div>
+                                <div class="stat-label">قيد الانتظار</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card processing">
+                            <div class="stat-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="processing-count">0</div>
+                                <div class="stat-label">قيد المعالجة</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card delivered">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="delivered-count">0</div>
+                                <div class="stat-label">تم التوصيل</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- فلترة الطلبات -->
+                <section class="filter-section">
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-filter"></i>
+                            تصفية الطلبات
+                        </h2>
+                        <div class="filter-controls">
+                            <div class="filter-group">
+                                <label for="sort-select">ترتيب حسب:</label>
+                                <select id="sort-select" class="filter-select">
+                                    <option value="newest">الأحدث أولاً</option>
+                                    <option value="oldest">الأقدم أولاً</option>
+                                    <option value="amount">الأعلى سعراً</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="status-select">حالة الطلب:</label>
+                                <select id="status-select" class="filter-select">
+                                    <option value="all">جميع الحالات</option>
+                                    <option value="pending">قيد الانتظار</option>
+                                    <option value="processing">قيد المعالجة</option>
+                                    <option value="shipped">تم الشحن</option>
+                                    <option value="delivered">تم التوصيل</option>
+                                    <option value="canceled">ملغي</option>
+                                </select>
+                            </div>
+
+                            <button id="refresh-btn" class="btn-secondary">
+                                <i class="fas fa-sync-alt"></i>
+                                تحديث
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- قائمة الطلبات -->
+                <section class="orders-section">
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-list"></i>
+                            طلباتي السابقة
+                        </h2>
+                        
+                        <div class="orders-container" id="orders-container">
+                            <!-- سيتم تعبئة الطلبات هنا ديناميكياً -->
+                        </div>
+
+                        <!-- رسالة عدم وجود طلبات -->
+                        <div id="no-orders" class="no-orders" style="display: none;">
+                            <div class="no-orders-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <h3>لا توجد طلبات سابقة</h3>
+                            <p>لم تقم بأي طلبات حتى الآن. ابدأ بتجربة خدماتنا!</p>
+                            <a href="order.html" class="btn-primary">
+                                <i class="fas fa-utensils"></i>
+                                طلب جديد
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- نافذة التنبيهات -->
+    <div id="alert-modal" class="modal alert-modal">
+        <div class="modal-content">
+            <div class="alert-icon" id="alert-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 id="alert-title">تم بنجاح</h3>
+            <p id="alert-message">رسالة التنبيه</p>
+            <button class="btn-primary" id="close-alert">حسناً</button>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الطلب -->
+    <div id="order-details-modal" class="modal order-details-modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="order-details-title">تفاصيل الطلب</h3>
+                <button class="close-modal" id="close-order-details">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="order-details-content">
+                <!-- سيتم تعبئة المحتوى هنا ديناميكياً -->
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/orderstate.js"></script>
+</body>
+</html>

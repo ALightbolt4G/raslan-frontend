@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /private/
+
+# منع فهرسة مجلد dashboard بشكل إجباري
+User-agent: Googlebot
+Disallow: /dashboard/
+
+User-agent: Bingbot
+Disallow: /dashboard/
+
+User-agent: Slurp
+Disallow: /dashboard/
+
+Sitemap: https://raslankoshary.com/sitemap.xml

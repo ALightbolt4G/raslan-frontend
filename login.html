@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - كشري وكريب رسلان</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        :root {
+            --primary: #ee5f06;
+            --primary-dark: #d35400;
+            --secondary: #f4bf3a;
+            --light: #fffaf2;
+            --dark: #333;
+            --gray: #666;
+            --border: #e9ecef;
+            --success: #10b981;
+            --error: #dc2626;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light), #fff2e0);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            padding: 5px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .login-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(238, 95, 6, 0.3);
+        }
+
+        .form-container {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(238, 95, 6, 0.1);
+        }
+
+        .form-control:valid {
+            border-color: var(--success);
+        }
+
+        .form-control:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--error);
+        }
+
+        .phone-input {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(238, 95, 6, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .welcome-message {
+            display: none;
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .welcome-message.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .client-id {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .order-btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        .history-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-login button {
+            background: none;
+            border: none;
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-to-login button:hover {
+            color: #f0f0f0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee;
+            color: var(--error);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+            border: 1px solid #fcc;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .area-hint {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #f0fff4;
+            color: var(--success);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+            border: 1px solid #c6f6d5;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .login-header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .client-id {
+                font-size: 2rem;
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 10px;
+                padding: 25px 15px;
+            }
+            
+            .client-id {
+                font-size: 1.8rem;
+                padding: 10px 15px;
+            }
+            
+            .welcome-message {
+                padding: 30px 20px;
+            }
+        }
+
+        /* تحسينات الوصول */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://dl.dropboxusercontent.com/scl/fi/3wxmcrpin4801l00fzpop/favicon.png?rlkey=eg10mnljj2r5sad2rtnicx8q6&st=lr4ya4du" alt="كشري وكريب رسلان" class="logo">
+            <h1>مرحباً بك في رسلان! 👋</h1>
+            <p>سجل دخولك لتجربة أفضل</p>
+        </div>
+
+        <div class="login-tabs">
+            <button class="tab-btn active" data-tab="new-client">عميل جديد</button>
+            <button class="tab-btn" data-tab="existing-client">لدي حساب</button>
+        </div>
+
+        <!-- رسائل التنبيه -->
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+
+        <!-- تحميل -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>جاري المعالجة...</p>
+        </div>
+
+        <!-- نموذج العميل الجديد -->
+        <div class="form-container active" id="new-client-form">
+            <form id="new-client-form-element">
+                <div class="form-group">
+                    <label for="client-name">
+                        <i class="fas fa-user"></i> الاسم الكامل
+                    </label>
+                    <input type="text" id="client-name" class="form-control" required placeholder="أدخل اسمك الكامل">
+                </div>
+
+                <div class="form-group">
+                    <label for="client-phone">
+                        <i class="fas fa-phone"></i> رقم الهاتف
+                    </label>
+                    <input type="tel" id="client-phone" class="form-control phone-input" required placeholder="01012345678" pattern="01[0-9]{9}">
+                </div>
+
+                <div class="form-group">
+                    <label for="client-area">
+                        <i class="fas fa-map-marker-alt"></i> المنطقة
+                    </label>
+                    <select id="client-area" class="form-control" required>
+                        <option value="">جاري تحميل المناطق...</option>
+                    </select>
+                    <div class="area-hint">سيتم عرض رسوم التوصيل لكل منطقة</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="client-address">
+                        <i class="fas fa-home"></i> العنوان التفصيلي
+                    </label>
+                    <textarea id="client-address" class="form-control" rows="3" required placeholder="أدخل عنوانك التفصيلي"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="new-client-submit">
+                    <i class="fas fa-user-plus"></i> إنشاء حساب جديد
+                </button>
+            </form>
+
+            <div class="form-links">
+                <a href="#" class="link" id="show-forgot-password">
+                    <i class="fas fa-key"></i> نسيت كودك؟
+                </a>
+            </div>
+        </div>
+
+        <!-- نموذج العميل الحالي -->
+        <div class="form-container" id="existing-client-form">
+            <form id="existing-client-form-element">
+                <div class="form-group">
+                    <label for="client-phone-existing">
+                        <i class="fas fa-phone"></i> رقم الهاتف
+                    </label>
+                    <input type="tel" id="client-phone-existing" class="form-control phone-input" required placeholder="01012345678" pattern="01[0-9]{9}">
+                </div>
+
+                <button type="submit" class="submit-btn" id="existing-client-submit">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </button>
+            </form>
+
+            <div class="form-links">
+                <a href="#" class="link" id="show-forgot-password-existing">
+                    <i class="fas fa-key"></i> نسيت كودك؟
+                </a>
+            </div>
+        </div>
+
+        <!-- نموذج استعادة الكود -->
+        <div class="form-container" id="forgot-password-form">
+            <form id="forgot-password-form-element">
+                <div class="form-group">
+                    <label for="recovery-phone">
+                        <i class="fas fa-phone"></i> رقم الهاتف
+                    </label>
+                    <input type="tel" id="recovery-phone" class="form-control phone-input" required placeholder="01012345678" pattern="01[0-9]{9}">
+                </div>
+
+                <button type="submit" class="submit-btn" id="recovery-submit">
+                    <i class="fas fa-key"></i> استعادة الكود
+                </button>
+            </form>
+
+            <div class="back-to-login">
+                <button id="back-to-login">
+                    <i class="fas fa-arrow-right"></i> العودة لتسجيل الدخول
+                </button>
+            </div>
+        </div>
+
+        <!-- رسالة الترحيب -->
+        <div class="welcome-message" id="welcome-message">
+            <div class="welcome-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>مرحباً بك معنا! 🎉</h2>
+            <p>تم تسجيل دخولك بنجاح</p>
+            <div class="client-id" id="client-id-display">#12345</div>
+            <p>احتفظ بهذا الرقم لتسجيل الدخول في المستقبل</p>
+            
+            <div class="actions">
+                <button class="action-btn order-btn" onclick="window.location.href='order.html'">
+                    <i class="fas fa-shopping-cart"></i> اطلب الآن
+                </button>
+                <button class="action-btn history-btn" onclick="window.location.href='orderstate.html'">
+                    <i class="fas fa-history"></i> طلباتي السابقة
+                </button>
+            </div>
+
+            <div class="back-to-login">
+                <button id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    // حالة التطبيق - نفس الـ Backend
+    const AppState = {
+        currentClient: null,
+        currentTab: 'new-client',
+        areas: [],
+        backendUrl: 'https://raslankoshary.up.railway.app/api'
+    };
+
+    // تهيئة التطبيق
+    window.addEventListener('load', async function() {
+        await initApp();
+    });
+
+    async function initApp() {
+        try {
+            await loadAndPopulateAreas();
+            setupEventListeners();
+            checkExistingSession();
+        } catch (error) {
+            console.error('Error in initApp:', error);
+            showError('حدث خطأ في تحميل التطبيق. يرجى تحديث الصفحة');
+        }
+    }
+
+    // تحميل المناطق من الـ backend - نفس المنطق
+    // استبدل دوال تحميل المناطق بهذا الكود:
+
+// تحميل المناطق من الـ backend - معدل
+async function loadAndPopulateAreas() {
+    try {
+        const response = await fetch(`${AppState.backendUrl}/areas`);
+        const result = await response.json();
+        
+        console.log('📡 استجابة الـ API للمناطق:', result); // للتصحيح
+        
+        if (result.success) {
+            AppState.areas = result.data;
+            populateAreaSelect(result.data);
+            console.log('✅ تم تحميل المناطق من الـ backend');
+        } else {
+            throw new Error(result.message || 'فشل في تحميل المناطق');
+        }
+    } catch (error) {
+        console.error('❌ فشل تحميل المناطق:', error);
+        loadDefaultAreas();
+    }
+}
+
+// بيانات المناطق الافتراضية - معدل
+function loadDefaultAreas() {
+    const defaultAreas = [
+        { id: 1, name: 'منشيه البكاري', delivery_fee: 10 },
+        { id: 2, name: 'كعبيش', delivery_fee: 15 },
+        { id: 3, name: 'طوابق', delivery_fee: 17 },
+        { id: 4, name: 'مريوطيه فيصل', delivery_fee: 20 },
+        { id: 5, name: 'شيشيني', delivery_fee: 15 }
+    ];
+    
+    AppState.areas = defaultAreas;
+    populateAreaSelect(defaultAreas);
+}
+
+// ملء قائمة المناطق - معدل
+function populateAreaSelect(areas) {
+    const areaSelect = document.getElementById('client-area');
+    if (!areaSelect) return;
+
+    areaSelect.innerHTML = '<option value="">اختر منطقتك</option>';
+
+    areas.forEach(area => {
+        // التعامل مع هياكل بيانات مختلفة
+        let areaId, areaName, deliveryFee;
+
+        if (area.areas && area.areas.id) {
+            // الهيكل القديم: { delivery_fee: 10, areas: { id: 1, name: 'اسم' } }
+            areaId = area.areas.id;
+            areaName = area.areas.name;
+            deliveryFee = area.delivery_fee;
+        } else if (area.id && area.name) {
+            // الهيكل الجديد: { id: 1, name: 'اسم', delivery_fee: 10 }
+            areaId = area.id;
+            areaName = area.name;
+            deliveryFee = area.delivery_fee || area.deliveryFee;
+        } else {
+            // إذا كان الهيكل غير معروف
+            console.warn('⚠️ هيكل منطقة غير معروف:', area);
+            return; // تخطي هذه المنطقة
+        }
+
+        const option = document.createElement('option');
+        option.value = areaId;
+        option.textContent = `${areaName} - ${deliveryFee} ج.م`;
+        option.setAttribute('data-fee', deliveryFee);
+        areaSelect.appendChild(option);
+    });
+
+    console.log('✅ تم تعبئة قائمة المناطق:', areas.length, 'منطقة');
+}
+
+// وأيضاً عدّل دالة إنشاء العميل الجديد لتتوافق مع الهيكل الجديد:
+async function handleNewClient(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('client-name').value.trim();
+    const phone = document.getElementById('client-phone').value.trim();
+    const areaId = document.getElementById('client-area').value;
+    const address = document.getElementById('client-address').value.trim();
+
+    // التحقق من البيانات
+    if (!name || !phone || !areaId || !address) {
+        showError('يرجى ملء جميع الحقول المطلوبة');
+        return;
+    }
+
+    if (!validatePhoneNumber(document.getElementById('client-phone'))) {
+        showError('يرجى إدخال رقم هاتف صحيح (11 رقم)');
+        return;
+    }
+
+    showLoading(true);
+
+    try {
+        // إعداد البيانات حسب توقعات الـ API
+        const requestData = {
+            name,
+            phone,
+            area_id: parseInt(areaId), // تأكد أنه رقم
+            address
+        };
+
+        console.log('📤 إرسال بيانات العميل:', requestData);
+
+        const response = await fetch(`${AppState.backendUrl}/clients/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        const result = await response.json();
+        console.log('📥 استجابة إنشاء العميل:', result);
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+        // حفظ العميل
+        localStorage.setItem('currentClient', JSON.stringify(result.data));
+        AppState.currentClient = result.data;
+
+        showWelcomeMessage(result.data.id);
+        showLoading(false);
+
+    } catch (error) {
+        console.error('Error creating client:', error);
+        showError(error.message || 'حدث خطأ أثناء إنشاء الحساب');
+        showLoading(false);
+    }
+}
+    // إعداد مستمعي الأحداث - نفس المنطق
+    function setupEventListeners() {
+        // تبديل التبويبات
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                switchTab(this.dataset.tab);
+            });
+        });
+
+        // النماذج
+        document.getElementById('new-client-form-element').addEventListener('submit', handleNewClient);
+        document.getElementById('existing-client-form-element').addEventListener('submit', handleExistingClient);
+        document.getElementById('forgot-password-form-element').addEventListener('submit', handleRecovery);
+
+        // روابط التنقل
+        document.getElementById('show-forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('forgot-password');
+        });
+
+        document.getElementById('show-forgot-password-existing').addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('forgot-password');
+        });
+
+        document.getElementById('back-to-login').addEventListener('click', function() {
+            switchTab('existing-client');
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', logout);
+
+        // التحقق من الصحة
+        document.querySelectorAll('input[type="tel"]').forEach(input => {
+            input.addEventListener('input', function() {
+                validatePhoneNumber(this);
+            });
+        });
+
+        document.getElementById('client-area').addEventListener('change', validateArea);
+    }
+
+    // معالجة عميل جديد - نفس المنطق
+    async function handleNewClient(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('client-name').value.trim();
+        const phone = document.getElementById('client-phone').value.trim();
+        const areaId = document.getElementById('client-area').value;
+        const address = document.getElementById('client-address').value.trim();
+
+        // التحقق من البيانات
+        if (!name || !phone || !areaId || !address) {
+            showError('يرجى ملء جميع الحقول المطلوبة');
+            return;
+        }
+
+        if (!validatePhoneNumber(document.getElementById('client-phone'))) {
+            showError('يرجى إدخال رقم هاتف صحيح (11 رقم)');
+            return;
+        }
+
+        showLoading(true);
+
+        try {
+            const response = await fetch(`${AppState.backendUrl}/clients/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    area_id: areaId,
+                    address
+                })
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            // حفظ العميل
+            localStorage.setItem('currentClient', JSON.stringify(result.data));
+            AppState.currentClient = result.data;
+
+            showWelcomeMessage(result.data.id);
+            showLoading(false);
+
+        } catch (error) {
+            console.error('Error creating client:', error);
+            showError(error.message || 'حدث خطأ أثناء إنشاء الحساب');
+            showLoading(false);
+        }
+    }
+
+    // معالجة عميل حالي - نفس المنطق
+    async function handleExistingClient(e) {
+        e.preventDefault();
+        
+        const phone = document.getElementById('client-phone-existing').value.trim();
+
+        if (!validatePhoneNumber(document.getElementById('client-phone-existing'))) {
+            showError('يرجى إدخال رقم هاتف صحيح (11 رقم)');
+            return;
+        }
+
+        showLoading(true);
+
+        try {
+            const response = await fetch(`${AppState.backendUrl}/clients/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phone })
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            localStorage.setItem('currentClient', JSON.stringify(result.data));
+            AppState.currentClient = result.data;
+
+            showWelcomeMessage(result.data.id);
+            showLoading(false);
+
+        } catch (error) {
+            console.error('Error logging in:', error);
+            showError(error.message || 'حدث خطأ أثناء تسجيل الدخول');
+            showLoading(false);
+        }
+    }
+
+	// أضف هذه الدالة للتحقق من هيكل البيانات
+async function debugAreasAPI() {
+    try {
+        const response = await fetch(`${AppState.backendUrl}/areas`);
+        const result = await response.json();
+        console.log('🐛 تصحيح هيكل المناطق:', {
+            response: result,
+            data: result.data,
+            firstItem: result.data ? result.data[0] : 'no data'
+        });
+    } catch (error) {
+        console.error('🐛 خطأ في تصحيح المناطق:', error);
+    }
+}
+
+// استدعها في initApp بعد تحميل المناطق
+async function initApp() {
+    try {
+        await loadAndPopulateAreas();
+        await debugAreasAPI(); // أضف هذا السطر
+        setupEventListeners();
+        checkExistingSession();
+    } catch (error) {
+        console.error('Error in initApp:', error);
+        showError('حدث خطأ في تحميل التطبيق. يرجى تحديث الصفحة');
+    }
+}
+    // معالجة استعادة الحساب - نفس المنطق
+    async function handleRecovery(e) {
+        e.preventDefault();
+        
+        const phone = document.getElementById('recovery-phone').value.trim();
+
+        if (!validatePhoneNumber(document.getElementById('recovery-phone'))) {
+            showError('يرجى إدخال رقم هاتف صحيح (11 رقم)');
+            return;
+        }
+
+        showLoading(true);
+
+        try {
+            const response = await fetch(`${AppState.backendUrl}/clients/recover/${phone}`);
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            showWelcomeMessage(result.data.id, true);
+            showLoading(false);
+
+        } catch (error) {
+            console.error('Error recovering account:', error);
+            showError(error.message || 'حدث خطأ أثناء استعادة الحساب');
+            showLoading(false);
+        }
+    }
+
+    // الدوال المساعدة - نفس المنطق
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabName);
+        });
+
+        document.querySelectorAll('.form-container').forEach(form => {
+            form.classList.toggle('active', form.id === `${tabName}-form`);
+        });
+
+        AppState.currentTab = tabName;
+    }
+
+    function validatePhoneNumber(input) {
+        const phone = input.value.trim();
+        const isValid = /^01[0-9]{9}$/.test(phone);
+        
+        if (phone && !isValid) {
+            input.style.borderColor = '#dc2626';
+        } else {
+            input.style.borderColor = '#e9ecef';
+        }
+        
+        return isValid;
+    }
+
+    function validateArea() {
+        const areaSelect = document.getElementById('client-area');
+        const isValid = areaSelect.value !== '';
+        
+        if (!isValid) {
+            areaSelect.style.borderColor = '#dc2626';
+        } else {
+            areaSelect.style.borderColor = '#e9ecef';
+        }
+        
+        return isValid;
+    }
+
+    function showWelcomeMessage(clientId, isRecovery = false) {
+        document.getElementById('client-id-display').textContent = `#${clientId}`;
+        
+        if (isRecovery) {
+            document.querySelector('#welcome-message h2').textContent = 'تم استعادة كودك';
+            document.querySelector('#welcome-message p').textContent = 'إليك كود حسابك:';
+        }
+        
+        document.getElementById('welcome-message').classList.add('active');
+        document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+        document.querySelector('.login-tabs').style.display = 'none';
+    }
+
+    function logout() {
+        localStorage.removeItem('currentClient');
+        AppState.currentClient = null;
+        document.getElementById('welcome-message').classList.remove('active');
+        document.querySelector('.login-tabs').style.display = 'flex';
+        switchTab('existing-client');
+        document.querySelectorAll('form').forEach(form => form.reset());
+    }
+
+    function checkExistingSession() {
+        const savedClient = localStorage.getItem('currentClient');
+        if (savedClient) {
+            const client = JSON.parse(savedClient);
+            AppState.currentClient = client;
+            showWelcomeMessage(client.id);
+        }
+    }
+
+    function showLoading(show) {
+        document.getElementById('loading').classList.toggle('active', show);
+    }
+
+    function showError(message) {
+        const errorEl = document.getElementById('error-message');
+        errorEl.textContent = message;
+        errorEl.classList.add('active');
+        
+        setTimeout(() => {
+            errorEl.classList.remove('active');
+        }, 5000);
+    }
+
+    function showSuccess(message) {
+        const successEl = document.getElementById('success-message');
+        successEl.textContent = message;
+        successEl.classList.add('active');
+        
+        setTimeout(() => {
+            successEl.classList.remove('active');
+        }, 3000);
+    }
+
+    // جعل الدوال متاحة عالمياً
+    window.switchTab = switchTab;
+    window.logout = logout;
+    </script>
+</body>
+</html>
