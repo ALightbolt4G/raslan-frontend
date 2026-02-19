@@ -277,9 +277,10 @@ showServiceUnavailableMessage: function(countryCode) {
     messageDiv.className = 'service-unavailable-message';
     messageDiv.innerHTML = `
         <div class="unavailable-card">
-            <button class="close-btn" onclick="this.parentElement.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
+            <button class="close-btn" onclick="document.querySelector('.service-unavailable-message').remove()">
+    <i class="fas fa-times"></i>
+</button>
+
             <div class="unavailable-content">
                 <div class="icon">🌍</div>
                 <h3>Welcome to Raslan!</h3>
@@ -337,10 +338,10 @@ showServiceUnavailableMessage: function(countryCode) {
                     </div>
                 </div>
 
-                <div class="actions">
-                    <button class="btn-close" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        Continue Browsing
-                    </button>
+              <button class="btn-close" onclick="document.querySelector('.service-unavailable-message').remove()">
+    Continue Browsing
+</button>
+
                     <a href="https://maps.app.goo.gl/UqQjVso6a6xAzsUX7" target="_blank" class="btn-map">
                         📍 Save Our Location
                     </a>
