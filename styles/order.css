@@ -1,4 +1,9 @@
 /* styles/order.css */
+/* السطر السحري */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     --primary: #ee5f06;
     --primary-dark: #d35400;
