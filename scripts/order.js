@@ -1243,8 +1243,23 @@ async function handleOrderSubmit() {
         showAlert('خطأ', error.message || 'حدث خطأ في إرسال الطلب', 'error');
     }
 }
+
+function isRamadan() {
+    const today = new Date();
+    // استخدام التقويم الهجري (u-ca-islamic-uma)
+    const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma-nu-latn', {
+        month: 'numeric'
+    }).format(today);
+    
+    // شهر رمضان هو الشهر رقم 9 في التقويم الهجري
+    return parseInt(hijriDate) === 9;
+}
 // التحقق من الطلب
 function validateOrder() {
+    if (isRamadan()) {
+        showAlert('رمضان كريم 🌙', 'كل عام وأنتم بخير.. كشري رسلان في إجازة خلال شهر رمضان المبارك. ننتظركم في أول أيام العيد!', 'info');
+        return false;
+    }
     // التحقق من وجود عناصر في السلة
     if (AppState.cart.length === 0) {
         showAlert('خطأ', 'السلة فارغة. يرجى إضافة عناصر للطلب', 'error');
@@ -1285,6 +1300,28 @@ function validateOrder() {
     
     return true;
 }
+function applyRamadanLock() {
+    if (isRamadan()) {
+        const checkoutBtn = document.getElementById('checkout');
+        const submitOrderBtn = document.getElementById('submit-order');
+        
+        if (checkoutBtn) {
+            checkoutBtn.innerHTML = '<i class="fas fa-moon"></i> نلقاكم في العيد';
+            checkoutBtn.style.background = '#6b7280'; // لون رمادي
+        }
+        
+        if (submitOrderBtn) {
+            submitOrderBtn.disabled = true;
+            submitOrderBtn.title = "المطعم في إجازة رمضانية";
+        }
+    }
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    applyRamadanLock();
+}); 
+
 
 // إضافة دالة لفحص الاتصال بالـ API
 async function testOrderAPI() {
@@ -1330,33 +1367,45 @@ function showLoading(show) {
     if (loading) loading.style.display = show ? 'flex' : 'none';
 }
 
+// نظام التنبيهات الجديد (Toasts) بدل الـ Alert القديم
 function showAlert(title, message, type = 'info') {
-    const icon = document.getElementById('alert-icon');
-    const alertTitle = document.getElementById('alert-title');
-    const alertMessage = document.getElementById('alert-message');
-    
-    if (icon && alertTitle && alertMessage) {
-        // تعيين الأيقونة حسب النوع
-        const icons = {
-            success: 'fa-check-circle',
-            error: 'fa-exclamation-circle',
-            info: 'fa-info-circle'
-        };
-        
-        icon.innerHTML = `<i class="fas ${icons[type] || 'fa-info-circle'}"></i>`;
-        alertTitle.textContent = title;
-        alertMessage.textContent = message;
-        
-        // تلوين الخلفية حسب النوع
-        const modal = document.querySelector('.alert-modal');
-        if (modal) {
-            modal.style.backgroundColor = type === 'success' ? '#d4edda' : 
-                                         type === 'error' ? '#f8d7da' : '#d1ecf1';
-        }
-        
-        document.getElementById('alert-modal').style.display = 'flex';
+    // 1. التأكد من وجود حاوية التنبيهات
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
     }
+
+    // 2. تحديد الأيقونة حسب النوع
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle',
+        warning: 'fa-exclamation-triangle'
+    };
+
+    // 3. إنشاء عنصر التنبيه
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fas ${icons[type]}"></i>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    // 4. إضافة التنبيه للحاوية
+    container.appendChild(toast);
+
+    // 5. الحذف التلقائي بعد 3 ثواني
+    setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.4s forwards';
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
 }
+
 
 // ========== دوال إضافية مكملة ==========
 
